@@ -1,2 +1,2 @@
 # Physical-Computing
-Hello! This is my README file!
+Hello! This is my README file! - Diego Guzman
