@@ -26,6 +26,12 @@ unsigned long lastLevelUp = 0;
 int level = 1;
 
 void setup() {
+  /* 
+  Runs once when the Arduino starts. Sets up LED and button pins, seeds random numbers, clears the display, and starts a new game.
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int i = 0; i < 8; i++) {
     pinMode(rows[i], OUTPUT);
     pinMode(cols[i], OUTPUT);
@@ -43,6 +49,12 @@ void setup() {
 }
 
 void loop() {
+  /*
+  The main game loop that runs continuously. Checks for game over, handles input, moves bullets and aliens, detects collisions, draws frames, and levels up.
+  Arguments: None
+  Return Value: None
+  */
+  
   if (gameOver) {
     rippleExplosion(); 
     resetGame();
@@ -64,6 +76,12 @@ void loop() {
 }
 
 void handleInput() {
+  /*
+  Reads the left and right buttons to move the player horizontally. Includes delay to prevent oversensitive input.
+  Arguments: None
+  Return Value: None
+  */
+  
   static unsigned long lastPress = 0;
   unsigned long now = millis();
   if (now - lastPress < 120){
@@ -83,6 +101,12 @@ void handleInput() {
 }
 
 void autoFire() {
+  /*
+  Automatically fires bullets at timed intervals from the player's position. Activates one bullet if available.
+  Arguments: None
+  Return Value: None
+  */
+  
   unsigned long now = millis();
   if (now - lastBulletTime < bulletInterval){
     return;
@@ -101,6 +125,12 @@ void autoFire() {
 
 
 void moveBullets() {
+  /*
+  Moves active bullets upward one row. Deactivates bullets that move off-screen.
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int i = 0; i < MAX_BULLETS; i++) {
     if (bulletActive[i]) {
       bulletY[i]--;
@@ -112,6 +142,12 @@ void moveBullets() {
 }
 
 void moveAliens() {
+  /*
+  Moves aliens downward at regular time intervals. Ends the game if any alien reaches the bottom row.
+  Arguments: None
+  Return Value: None
+  */
+  
   unsigned long now = millis();
   if (now - lastAlienMove < alienInterval){ 
     return;
@@ -128,6 +164,12 @@ void moveAliens() {
 }
 
 void checkCollisions() {
+  /*
+  Detects when a bullet and an alien share the same position. Resets hit aliens and deactivates the bullet.
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int a = 0; a < MAX_ALIENS; a++) {
     for (int b = 0; b < MAX_BULLETS; b++) {
       if (bulletActive[b] && alienX[a] == bulletX[b] && alienY[a] == bulletY[b]) {
@@ -140,6 +182,12 @@ void checkCollisions() {
 }
 
 void levelUp() {
+  /*
+  Increases the game's difficulty every few seconds by speeding up alien movement and bullet firing.
+  Arguments: None
+  Return Value: None
+  */
+  
   unsigned long now = millis();
   if (now - lastLevelUp > 8000) {
     lastLevelUp = now;
@@ -154,6 +202,12 @@ void levelUp() {
 }
 
 void drawScene() {
+  /*
+  Updates and displays the LED matrix with the player, bullets, and aliens. Refreshes rows quickly to simulate animation.
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int r = 0; r < 8; r++){
     for (int c = 0; c < 8; c++){
       matrix[r][c] = 0;
@@ -187,6 +241,12 @@ void drawScene() {
 }
 
 void rippleExplosion() {
+  /*
+  Displays a ripple explosion animation when the player loses. Expands outward from the center and fades.
+  Arguments: None
+  Return Value: None
+  */
+  
   int center[4][2] = {{3,3}, {3,4}, {4,3}, {4,4}};
   int maxRadius = 6;
 
@@ -231,6 +291,12 @@ void rippleExplosion() {
 }
 
 void showFrame() {
+  /*
+  Displays the current LED matrix frame at normal brightness by scanning rows quickly.
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int r = 0; r < 8; r++) {
     digitalWrite(rows[r], HIGH);
     for (int c = 0; c < 8; c++){
@@ -245,6 +311,12 @@ void showFrame() {
 }
 
 void showDimFrame(int repeats) {
+  /*
+  Displays a dimmer version of the current LED frame for animation effects. Shorter LED on-time = dimmer light.
+  Arguments: int repeats — number of times to repeat the dimmed frame.
+  Return Value: None
+  */
+  
   for (int i = 0; i < repeats; i++) {
     for (int r = 0; r < 8; r++) {
       digitalWrite(rows[r], HIGH);
@@ -261,6 +333,12 @@ void showDimFrame(int repeats) {
 }
 
 void clearMatrix() {
+  /*
+  Completely clears the Maxtix by clearing the matrix array (sets every cell to 0).
+  Arguments: None
+  Return Value: None
+  */
+  
   for (int r = 0; r < 8; r++){
     for (int c = 0; c < 8; c++){
       matrix[r][c] = 0;
@@ -269,6 +347,12 @@ void clearMatrix() {
 }
 
 void resetGame() {
+  /*
+  Resets all game values to their starting state. Positions the player, randomizes alien start, clears bullets, and resets timers.
+  Arguments: None
+  Return Value: None
+  */
+  
   playerX = 3;
   gameOver = false;
   justReset = true;
