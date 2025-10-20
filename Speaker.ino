@@ -1,4 +1,4 @@
-const int speakerPin = 8;
+const int speakerPin = 4;
 
 void setup() {
   // Note 1
@@ -19,6 +19,5 @@ void setup() {
 }
 
 void loop() {
-
   setup();
 }
